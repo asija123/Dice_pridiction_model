@@ -12,7 +12,7 @@ def home():
         print(f"Received values - a: {a}, b: {b}, c: {c}")
 
         try:
-            prediction = [int(a), int(b), int(c), 12]
+            prediction = [int(a), int(b), int(c), 18]
         except (TypeError, ValueError) as e:
             print(f"Error in conversion: {e}")
             return "Invalid input. Please enter valid numbers."
