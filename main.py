@@ -4,7 +4,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-CSV_FILE = "data.csv"
+CSV_FILE = "predictions.csv"
 
 # Create file with header if it doesn't exist
 if not os.path.exists(CSV_FILE):
