@@ -1,12 +1,21 @@
+import csv
+import os
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
+
+CSV_FILE = "data.csv"
+
+# Create file with header if it doesn't exist
+if not os.path.exists(CSV_FILE):
+    with open(CSV_FILE, mode="w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Actual"])
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
         if "predict" in request.form:
-            # Predict button clicked
             a = request.form.get("a")
             b = request.form.get("b")
             c = request.form.get("c")
@@ -21,18 +30,22 @@ def home():
             return render_template("index.html", prediction=prediction)
 
         elif "submit_actual" in request.form:
-            # Save Actual button clicked
             actual = request.form.get("actual")
-
-            print(f"Saving actual value: {actual}")
 
             try:
                 actual = int(actual)
             except (TypeError, ValueError):
                 return "Invalid input. Please enter valid actual number."
 
-            # Save logic (DB, CSV, etc.) can go here
-            message = f"Actual value {actual} saved successfully!"
+            # Save to CSV
+            try:
+                with open(CSV_FILE, mode="a", newline="") as file:
+                    writer = csv.writer(file)
+                    writer.writerow([actual])
+                message = f"Actual value {actual} saved to CSV successfully!"
+            except Exception as e:
+                message = f"Error saving to CSV: {str(e)}"
+
             return render_template("index.html", message=message)
 
     return render_template("index.html")
