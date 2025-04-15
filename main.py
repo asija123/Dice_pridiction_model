@@ -5,13 +5,17 @@ app = Flask(__name__)
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
-        # Form se values le lo
         a = request.form.get("a")
         b = request.form.get("b")
         c = request.form.get("c")
-        
-        # Tumhara prediction logic yahan ayega
-        prediction = [int(a), int(b), int(c), 12]  # Bas example ke liye
+
+        print(f"Received values - a: {a}, b: {b}, c: {c}")
+
+        try:
+            prediction = [int(a), int(b), int(c), 12]
+        except (TypeError, ValueError) as e:
+            print(f"Error in conversion: {e}")
+            return "Invalid input. Please enter valid numbers."
 
         return render_template("index.html", prediction=prediction)
 
